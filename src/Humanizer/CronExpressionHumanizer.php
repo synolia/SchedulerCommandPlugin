@@ -10,7 +10,7 @@ use Sylius\Component\Locale\Context\LocaleNotFoundException;
 
 class CronExpressionHumanizer implements HumanizerInterface
 {
-    public function __construct(private LocaleContextInterface $localeContext)
+    public function __construct(private LocaleContextInterface $localeContext, private bool $timeFormat24Hours = false)
     {
     }
 
@@ -23,7 +23,7 @@ class CronExpressionHumanizer implements HumanizerInterface
         $locale = $this->getLocale();
 
         try {
-            return CronTranslator::translate($expression, $locale);
+            return CronTranslator::translate($expression, $locale, $this->timeFormat24Hours);
         } catch (\Throwable) {
             return $expression;
         }

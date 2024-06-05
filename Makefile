@@ -51,9 +51,6 @@ endif
 update-dependencies:
 	${COMPOSER} config extra.symfony.require "~${SYMFONY_VERSION}"
 	${COMPOSER} require symfony/asset:~${SYMFONY_VERSION} --no-scripts --no-update
-ifeq ($(shell [[ $(SYLIUS_VERSION) == 1.10.0 ]] && echo true ),true)
-	${COMPOSER} require php-http/message-factory --no-scripts --no-update
-endif
 	${COMPOSER} update --no-progress -n
 
 install-plugin:
