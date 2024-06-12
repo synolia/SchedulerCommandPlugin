@@ -111,6 +111,12 @@ Execute scheduled commands.
 
 **Run one scheduled command :** php bin/console synolia:scheduler-run --id=5
 
+Is it possible to choose the timezone of the command execution by setting the `SYNOLIA_SCHEDULER_PLUGIN_TIMEZONE` environment variable, example: 
+
+```
+SYNOLIA_SCHEDULER_PLUGIN_TIMEZONE=Europe/Paris
+```
+
 ### synolia:scheduler:purge-history
 
 Purge scheduled command history greater than {X} days old.

@@ -2,6 +2,7 @@ parameters:
     env(SYNOLIA_SCHEDULER_PLUGIN_PING_INTERVAL): 300
     env(SYNOLIA_SCHEDULER_PLUGIN_KEEP_ALIVE): true
     env(SYNOLIA_SCHEDULER_PLUGIN_LOGS_DIR): '%kernel.logs_dir%'
+    env(SYNOLIA_SCHEDULER_PLUGIN_TIMEZONE): null
 
 services:
     _defaults:
@@ -59,10 +60,14 @@ services:
             - { name: kernel.event_listener, event: sylius.grid.synolia_admin_scheduled_commands, method: onSyliusGridAdmin }
 
     Synolia\SyliusSchedulerCommandPlugin\Checker\EveryMinuteIsDueChecker:
+        arguments:
+            $dateTimeProvider: '@Synolia\SyliusSchedulerCommandPlugin\Provider\CalendarWithTimezone'
         tags:
             - { name: !php/const Synolia\SyliusSchedulerCommandPlugin\Checker\IsDueCheckerInterface::TAG_ID }
 
     Synolia\SyliusSchedulerCommandPlugin\Checker\SoftLimitThresholdIsDueChecker:
+        arguments:
+            $dateTimeProvider: '@Synolia\SyliusSchedulerCommandPlugin\Provider\CalendarWithTimezone'
         tags:
             - { name: !php/const Synolia\SyliusSchedulerCommandPlugin\Checker\IsDueCheckerInterface::TAG_ID }
 
@@ -80,3 +85,7 @@ services:
     Synolia\SyliusSchedulerCommandPlugin\DoctrineEvent\ScheduledCommandPostRemoveEvent:
         tags:
             - { name: doctrine.event_subscriber, connection: default }
+
+    Synolia\SyliusSchedulerCommandPlugin\Provider\CalendarWithTimezone:
+        arguments:
+            $timezone: '%env(SYNOLIA_SCHEDULER_PLUGIN_TIMEZONE)%'
