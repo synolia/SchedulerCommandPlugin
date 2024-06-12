@@ -10,6 +10,14 @@ use Tests\Synolia\SyliusSchedulerCommandPlugin\PHPUnit\AbstractIsDueTest;
 
 class EveryMinuteIsDueCheckerTest extends AbstractIsDueTest
 {
+    private EveryMinuteIsDueChecker $everyMinuteIsDueChecker;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->everyMinuteIsDueChecker = static::getContainer()->get(EveryMinuteIsDueChecker::class);
+    }
+
     /**
      * @dataProvider isDueUsingCronExpressionDataProvider
      */
@@ -18,13 +26,12 @@ class EveryMinuteIsDueCheckerTest extends AbstractIsDueTest
         \DateTimeInterface $currentDateTime,
         bool $expectedResult,
     ): void {
-        $checker = new EveryMinuteIsDueChecker();
         $command = $this->setupCommand($cronExpression);
 
         if ($expectedResult === false) {
             $this->expectException(IsNotDueException::class);
         }
 
-        $this->assertEquals($expectedResult, $checker->isDue($command, $currentDateTime));
+        $this->assertEquals($expectedResult, $this->everyMinuteIsDueChecker->isDue($command, $currentDateTime));
     }
 }
