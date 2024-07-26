@@ -43,9 +43,9 @@ else
 endif
 	${COMPOSER} config allow-plugins true
 ifeq ($(shell [[ $(SYLIUS_VERSION) == *dev ]] && echo true ),true)
-	${COMPOSER} require sylius/sylius:"${SYLIUS_VERSION}"
+	${COMPOSER} require --no-update sylius/sylius:"${SYLIUS_VERSION}"
 else
-	${COMPOSER} require sylius/sylius:"~${SYLIUS_VERSION}"
+	${COMPOSER} require --no-update sylius/sylius:"~${SYLIUS_VERSION}"
 endif
 
 update-dependencies:
