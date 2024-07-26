@@ -2,6 +2,7 @@ parameters:
     env(SYNOLIA_SCHEDULER_PLUGIN_PING_INTERVAL): 300
     env(SYNOLIA_SCHEDULER_PLUGIN_KEEP_ALIVE): true
     env(SYNOLIA_SCHEDULER_PLUGIN_LOGS_DIR): '%kernel.logs_dir%'
+    env(SYNOLIA_SCHEDULER_PLUGIN_TIMEFORMAT_24H): false
 
 services:
     _defaults:
@@ -11,6 +12,7 @@ services:
         bind:
             $logsDir: '%env(string:SYNOLIA_SCHEDULER_PLUGIN_LOGS_DIR)%'
             $projectDir: '%kernel.project_dir%'
+            $timeFormat24Hours: '%env(bool:SYNOLIA_SCHEDULER_PLUGIN_TIMEFORMAT_24H)%'
 
     Synolia\SyliusSchedulerCommandPlugin\:
         resource: '../../*'
