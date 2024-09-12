@@ -68,6 +68,10 @@
         cp -R vendor/synolia/sylius-scheduler-command-plugin/install/Application/config/packages/* config/packages/
         cp -R vendor/synolia/sylius-scheduler-command-plugin/install/Application/config/routes/* config/routes/
 
+6. Installing assets (JS and CSS) fot the plugin
+
+        bin/console assets:install
+
 ## Usage
 
 * Log into admin panel

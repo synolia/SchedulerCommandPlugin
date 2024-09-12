@@ -1,30 +1,24 @@
-{% extends '@SyliusAdmin/layout.html.twig' %}
+<div class="ui icon input">
+    <input id="grep" type="text" placeholder="Search...">
+    <i class="search icon"></i>
+</div>
 
-{% import '@SyliusUi/Macro/headers.html.twig' as headers %}
-
-{% block title %}{{ 'synolia.ui.live_view_of_scheduled_command'|trans({'%scheduledCommandName%': scheduledCommand.name|e}) }} {{ parent() }}{% endblock %}
-
-{% block content %}
-    {{ headers.default('synolia.ui.live_view_of_scheduled_command'|trans({'%scheduledCommandName%': scheduledCommand.name|e}), 'cogs') }}
-
-    <div class="ui input">
-        <input id="grep" type="text" placeholder="Search...">
-    </div>
-
+<div id="log-results">
     <pre id="results">
         <div class="ui active centered inline loader"></div>
     </pre>
+</div>
 
-    {{ sylius_template_event('synolia.admin.command.logs.stylesheets') }}
+{{ sylius_template_event('synolia.admin.command.logs.stylesheets') }}
 
-    <script type="text/javascript">
-        {% autoescape 'js' %}
-        /* <![CDATA[ */
-        var sy_updateTime = {{ updateTime }};
-        var sy_route = "{{ route }}";
-        /* ]]> */
-        {% endautoescape %}
-    </script>
+<script type="text/javascript">
+    {% autoescape 'js' %}
+    /* <![CDATA[ */
+    var sy_updateTime = {{ updateTime }};
+    var sy_route = "{{ route }}";
+    /* ]]> */
+    {% endautoescape %}
+</script>
 
-    {{ sylius_template_event('synolia.admin.command.logs.javascripts') }}
-{% endblock %}
+{{ sylius_template_event('synolia.admin.command.logs.javascripts') }}
+

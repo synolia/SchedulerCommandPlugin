@@ -2,7 +2,7 @@ function fireLog(e) {
   e.preventDefault();
   var url = $(e.currentTarget).data('href');
   $.get(url, function (data) {
-    $('#log-modal .description').html($(data).find('#content'));
+    $('#log-content').html($(data));
   }).done(function () {
     $('#log-modal').modal('show');
   })

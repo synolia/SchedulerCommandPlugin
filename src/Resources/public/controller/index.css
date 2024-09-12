@@ -8,20 +8,15 @@ pre {
 
 #results {
     border: solid 1px;
-    padding: 5px;
+    padding: 10px;
     overflow-y: scroll;
-    height: calc(100% - 150px);
+    height: calc(100% - 80px);
 }
 
 #log-modal {
-    width: calc(100% - 100px);
-    height: calc(100% - 100px);
-}
-
-#log-modal .description,
-#log-modal > .content,
-#log-modal #content {
-    height: 100%;
+    width: calc(100% - 120px);
+    height: calc(100% - 120px);
+    overflow-y: hidden;
 }
 
 #results .loader:before {
@@ -30,4 +25,13 @@ pre {
 
 #results .loader:after {
     border-color: #767676 transparent transparent;
+}
+
+#log-content {
+    padding: 10px;
+    height: calc(100% - 20px);
+}
+
+#log-results {
+    height: calc(100% - 20px);
 }

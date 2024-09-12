@@ -7,8 +7,8 @@ COMPOSER=cd tests/Application && composer
 YARN=cd tests/Application && yarn
 
 SYLIUS_VERSION=1.12.0
-SYMFONY_VERSION=6.1
-PHP_VERSION=8.1
+SYMFONY_VERSION=6.4
+PHP_VERSION=8.2
 PLUGIN_NAME=synolia/sylius-scheduler-command-plugin
 
 ###
@@ -71,6 +71,7 @@ install-sylius:
 	${CONSOLE} sylius:fixtures:load default -n
 	${YARN} install
 	${YARN} build
+	${CONSOLE} assets:install -n
 	${CONSOLE} cache:clear
 
 configure-sylius:
