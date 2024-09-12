@@ -53,7 +53,10 @@ default:
                         browser: firefox
             show_auto: false
 
-        FriendsOfBehat\SymfonyExtension: ~
+        FriendsOfBehat\SymfonyExtension:
+            bootstrap: tests/Application/config/bootstrap.php
+            kernel:
+                class: Tests\Synolia\SyliusSchedulerCommandPlugin\Application\Kernel
 
         FriendsOfBehat\VariadicExtension: ~
 
