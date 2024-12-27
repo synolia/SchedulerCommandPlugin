@@ -11,7 +11,7 @@ use Synolia\SyliusSchedulerCommandPlugin\Parser\CommandParserInterface;
 
 final class CommandChoiceType extends AbstractType
 {
-    public function __construct(private CommandParserInterface $commandParser)
+    public function __construct(private readonly CommandParserInterface $commandParser)
     {
     }
 
@@ -24,7 +24,7 @@ final class CommandChoiceType extends AbstractType
         );
     }
 
-    public function getParent()
+    public function getParent(): string
     {
         return ChoiceType::class;
     }

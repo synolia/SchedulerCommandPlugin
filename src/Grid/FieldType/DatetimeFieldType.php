@@ -8,11 +8,15 @@ use Sylius\Component\Grid\DataExtractor\DataExtractorInterface;
 use Sylius\Component\Grid\Definition\Field;
 use Sylius\Component\Grid\FieldTypes\FieldTypeInterface;
 use Sylius\Component\Locale\Context\LocaleContextInterface;
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-final class DatetimeFieldType implements FieldTypeInterface
+#[AutoconfigureTag('sylius.grid_field', attributes: ['type' => 'scheduled_command_executed_at'])]
+final readonly class DatetimeFieldType implements FieldTypeInterface
 {
     public function __construct(
+        #[Autowire('@sylius.grid.data_extractor.property_access')]
         private DataExtractorInterface $dataExtractor,
         private LocaleContextInterface $localeContext,
     ) {

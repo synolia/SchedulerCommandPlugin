@@ -3,18 +3,30 @@
 declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
-use Rector\Set\ValueObject\LevelSetList;
+use Rector\Set\ValueObject\SetList;
+use Rector\Symfony\Set\SymfonySetList;
 
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->paths([
-        dirname(__DIR__) . '/src',
-        dirname(__DIR__) . '/spec',
-        dirname(__DIR__) . '/tests/Behat',
-        dirname(__DIR__) . '/tests/PHPUnit',
+return RectorConfig::configure()
+    ->withPaths([
+        \dirname(__DIR__, 1) . '/src',
+        \dirname(__DIR__, 1) . '/tests/PHPUnit',
+    ])
+    ->withPHPStanConfigs([__DIR__ . '/phpstan.neon'])
+    ->withPhpSets(php82: true)
+    ->withAttributesSets(symfony: true, doctrine: true)
+    ->withPreparedSets(
+        deadCode: true,
+        codeQuality: true,
+        doctrineCodeQuality: true,
+        symfonyConfigs: true,
+    )
+    ->withTypeCoverageLevel(0)
+    ->withSets([
+        SymfonySetList::SYMFONY_60,
+        SymfonySetList::SYMFONY_61,
+        SymfonySetList::SYMFONY_62,
+        SymfonySetList::SYMFONY_63,
+        SymfonySetList::SYMFONY_64,
+        SetList::CODE_QUALITY,
+        SetList::DEAD_CODE,
     ]);
-
-    $rectorConfig->sets([
-        LevelSetList::UP_TO_PHP_74,
-        LevelSetList::UP_TO_PHP_80
-    ]);
-};

@@ -14,7 +14,7 @@ final class BytesFormatterExtension extends AbstractExtension
     public function getFilters(): array
     {
         return [
-            new TwigFilter('format_bytes', [$this, 'formatBytes']),
+            new TwigFilter('format_bytes', $this->formatBytes(...)),
         ];
     }
 

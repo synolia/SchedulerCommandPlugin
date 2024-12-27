@@ -1,20 +1,17 @@
 parameters:
     level: 8
     reportUnmatchedIgnoredErrors: false
-    checkMissingIterableValueType: false
-    checkGenericClassInNonGenericObjectType: false
+    paths:
+        - ../src
     excludePaths:
-        # Makes PHPStan crash
-        - ../src/DependencyInjection/Configuration.php
-        - ../src/Migrations/
-
-        # Test dependencies
+        - ../src/DependencyInjection/Configuration.php?
+        - ../migrations
         - ../tests
-
-        # PHPSpec
         - ../spec
 
     ignoreErrors:
+        - identifier: missingType.iterableValue
+        - identifier: missingType.generics
         - '/Parameter #1 \$configuration of method Symfony\Component\DependencyInjection\Extension\Extension::processConfiguration\(\) expects Symfony\Component\Config\Definition\ConfigurationInterface, Symfony\Component\Config\Definition\ConfigurationInterface\|null given./'
         - '#^Method [\w\\]+Type::render\(\) has parameter \$[\w]+ with no typehint specified.$#'
         - '#Variable method call on Synolia\\SyliusSchedulerCommandPlugin\\Entity\\ScheduledCommand.#'

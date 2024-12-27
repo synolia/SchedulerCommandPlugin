@@ -10,80 +10,55 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Synolia\SyliusSchedulerCommandPlugin\Repository\CommandRepository;
 
-/**
- * @ORM\Entity(repositoryClass="Synolia\SyliusSchedulerCommandPlugin\Repository\CommandRepository")
- * @ORM\Table("synolia_commands")
- */
 #[ORM\Entity(repositoryClass: CommandRepository::class)]
 #[ORM\Table(name: 'synolia_commands')]
 class Command implements CommandInterface
 {
-    /**
-     * @var int|null
-     *
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
+    /** @var int|null */
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: Types::INTEGER)]
     private $id;
 
-    /** @ORM\Column(type="string") */
     #[ORM\Column(type: Types::STRING)]
     private string $name = '';
 
-    /** @ORM\Column(type="string") */
     #[ORM\Column(type: Types::STRING)]
     private string $command = '';
 
-    /** @ORM\Column(type="string", nullable=true) */
     #[ORM\Column(type: Types::STRING, nullable: true)]
     private ?string $arguments = null;
 
-    /**
-     * @see https://abunchofutils.com/u/computing/cron-format-helper/
-     *
-     * @ORM\Column(type="string")
-     */
+    /** @see https://abunchofutils.com/u/computing/cron-format-helper/ */
     #[ORM\Column(type: Types::STRING)]
     private string $cronExpression = '* * * * *';
 
     /**
      * Log's file name prefix (without path), followed by a time stamp of the execution
-     *
-     * @ORM\Column(type="string", nullable=true)
      */
     #[ORM\Column(type: Types::STRING, nullable: true)]
     private ?string $logFilePrefix = null;
 
-    /** @ORM\Column(type="integer") */
     #[ORM\Column(type: Types::INTEGER)]
     private int $priority = 0;
 
     /**
-     * If true, command will be execute next time regardless cron expression
-     *
-     * @ORM\Column(type="boolean")
+     * If true, command will be executed next time regardless cron expression
      */
     #[ORM\Column(type: Types::BOOLEAN)]
     private bool $executeImmediately = false;
 
-    /** @ORM\Column(type="boolean") */
     #[ORM\Column(type: Types::BOOLEAN)]
     private bool $enabled = true;
 
-    /** @ORM\Column(type="integer", nullable=true) */
     #[ORM\Column(type: Types::INTEGER, nullable: true)]
     private ?int $timeout = null;
 
-    /** @ORM\Column(type="integer", nullable=true) */
     #[ORM\Column(type: Types::INTEGER, nullable: true)]
     private ?int $idleTimeout = null;
 
-    /** @ORM\OneToMany(targetEntity="Synolia\SyliusSchedulerCommandPlugin\Entity\ScheduledCommandInterface", mappedBy="owner") */
-    #[ORM\OneToMany(targetEntity: ScheduledCommandInterface::class, mappedBy: 'owner')]
+    /** @var Collection<array-key, ScheduledCommandInterface> */
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: ScheduledCommandInterface::class)]
     private Collection $scheduledCommands;
 
     public function __construct()
@@ -192,9 +167,6 @@ class Command implements CommandInterface
         return $this;
     }
 
-    /**
-     * @return Collection<array-key, \Synolia\SyliusSchedulerCommandPlugin\Entity\ScheduledCommandInterface>|\Synolia\SyliusSchedulerCommandPlugin\Entity\ScheduledCommandInterface[]
-     */
     public function getScheduledCommands(): Collection
     {
         return $this->scheduledCommands;

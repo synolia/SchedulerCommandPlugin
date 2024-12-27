@@ -7,12 +7,17 @@ namespace Synolia\SyliusSchedulerCommandPlugin\DoctrineEvent;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Events;
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Synolia\SyliusSchedulerCommandPlugin\Entity\ScheduledCommandInterface;
 
+#[AutoconfigureTag(attributes: ['name' => 'doctrine.event_subscriber', 'connection' => 'default'])]
 class ScheduledCommandPostRemoveEvent implements EventSubscriber
 {
-    public function __construct(private string $logsDir)
-    {
+    public function __construct(
+        #[Autowire(param: 'kernel.logs_dir')]
+        private readonly string $logsDir,
+    ) {
     }
 
     public function getSubscribedEvents(): array

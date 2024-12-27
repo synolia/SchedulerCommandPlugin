@@ -7,7 +7,9 @@ namespace Synolia\SyliusSchedulerCommandPlugin\Listener\Grid;
 use Sylius\Component\Grid\Definition\Action;
 use Sylius\Component\Grid\Definition\ActionGroup;
 use Sylius\Component\Grid\Event\GridDefinitionConverterEvent;
+use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 
+#[AsEventListener(event: 'sylius.grid.synolia_admin_scheduled_commands', method: 'onSyliusGridAdmin')]
 final class GoToCommandsButtonGridListener
 {
     public function onSyliusGridAdmin(GridDefinitionConverterEvent $event): void

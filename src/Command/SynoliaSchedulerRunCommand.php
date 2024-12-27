@@ -8,6 +8,7 @@ use Doctrine\DBAL\Exception\ConnectionLost;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Command\LockableTrait;
 use Symfony\Component\Console\Input\InputInterface;
@@ -23,11 +24,10 @@ use Synolia\SyliusSchedulerCommandPlugin\Repository\ScheduledCommandRepositoryIn
 use Synolia\SyliusSchedulerCommandPlugin\Runner\ScheduleCommandRunnerInterface;
 use Synolia\SyliusSchedulerCommandPlugin\Voter\IsDueVoterInterface;
 
+#[AsCommand(name: 'synolia:scheduler-run', description: 'Execute scheduled commands')]
 final class SynoliaSchedulerRunCommand extends Command
 {
     use LockableTrait;
-
-    protected static $defaultName = 'synolia:scheduler-run';
 
     public function __construct(
         private EntityManagerInterface $entityManager,
@@ -38,12 +38,11 @@ final class SynoliaSchedulerRunCommand extends Command
         private IsDueVoterInterface $isDueVoter,
         private LoggerInterface $logger,
     ) {
-        parent::__construct(static::$defaultName);
+        parent::__construct();
     }
 
     protected function configure(): void
     {
-        $this->setDescription('Execute scheduled commands');
         $this->addOption('id', 'i', InputOption::VALUE_OPTIONAL, 'Command ID');
     }
 

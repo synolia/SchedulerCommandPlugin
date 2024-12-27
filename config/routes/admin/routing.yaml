@@ -1,0 +1,25 @@
+synolia_admin_commands:
+    resource: |
+        alias: synolia.command
+        templates: "@SyliusAdmin\\Crud"
+        section: admin
+        grid: synolia_admin_commands
+        except: ['show']
+        permission: true
+        vars:
+            index:
+                icon: 'box'
+    type: sylius.resource
+
+synolia_admin_scheduled_commands:
+    resource: |
+        alias: synolia.scheduled_command
+        templates: "@SyliusAdmin\\Crud"
+        section: admin
+        grid: synolia_admin_scheduled_commands
+        except: ['update', 'show']
+        permission: true
+        vars:
+            index:
+                icon: 'box'
+    type: sylius.resource

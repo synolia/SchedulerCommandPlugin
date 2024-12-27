@@ -5,23 +5,27 @@ declare(strict_types=1);
 namespace Synolia\SyliusSchedulerCommandPlugin\Checker;
 
 use Cron\CronExpression;
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Synolia\SyliusSchedulerCommandPlugin\Components\Exceptions\Checker\IsNotDueException;
 use Synolia\SyliusSchedulerCommandPlugin\Entity\CommandInterface;
 use Synolia\SyliusSchedulerCommandPlugin\Repository\ScheduledCommandRepositoryInterface;
 
+#[AutoconfigureTag(IsDueCheckerInterface::TAG_ID)]
 class SoftLimitThresholdIsDueChecker implements IsDueCheckerInterface
 {
+    private const PRIORITY = -100;
+
     public static function getDefaultPriority(): int
     {
-        return -100;
+        return self::PRIORITY;
     }
 
     public function __construct(
-        private ScheduledCommandRepositoryInterface $scheduledCommandRepository,
+        private readonly ScheduledCommandRepositoryInterface $scheduledCommandRepository,
         /**
          * Threshold in minutes
          */
-        private int $threshold = 5,
+        private readonly int $threshold = 5,
     ) {
     }
 
@@ -30,7 +34,7 @@ class SoftLimitThresholdIsDueChecker implements IsDueCheckerInterface
      */
     public function isDue(CommandInterface $command, ?\DateTimeInterface $dateTime = null): bool
     {
-        if (null === $dateTime) {
+        if (!$dateTime instanceof \DateTimeInterface) {
             $dateTime = new \DateTime();
         }
 
@@ -45,7 +49,7 @@ class SoftLimitThresholdIsDueChecker implements IsDueCheckerInterface
         $lastCreatedScheduledCommand = $this->scheduledCommandRepository->findLastCreatedCommand($command);
 
         // if never, do my command is valid for the least "threshold" minutes
-        if ($lastCreatedScheduledCommand === null) {
+        if (!$lastCreatedScheduledCommand instanceof \Synolia\SyliusSchedulerCommandPlugin\Entity\ScheduledCommandInterface) {
             if ($dateTime->getTimestamp() >= $previousRunDate->getTimestamp() && $dateTime->getTimestamp() <= $previousRunDateThreshold->getTimestamp()) {
                 return true;
             }
@@ -54,13 +58,16 @@ class SoftLimitThresholdIsDueChecker implements IsDueCheckerInterface
         }
 
         // check if last command has been started since scheduled datetime +0..5 minutes
-        if ($lastCreatedScheduledCommand->getCreatedAt()->getTimestamp() >= $previousRunDate->getTimestamp() &&
+        if (
+            $lastCreatedScheduledCommand->getCreatedAt()->getTimestamp() >= $previousRunDate->getTimestamp() &&
             $lastCreatedScheduledCommand->getCreatedAt()->getTimestamp() <= $previousRunDateThreshold->getTimestamp() &&
-            $dateTime->getTimestamp() <= $previousRunDateThreshold->getTimestamp()) {
+            $dateTime->getTimestamp() <= $previousRunDateThreshold->getTimestamp()
+        ) {
             throw new IsNotDueException();
         }
 
-        if ($dateTime->getTimestamp() >= $previousRunDate->getTimestamp() &&
+        if (
+            $dateTime->getTimestamp() >= $previousRunDate->getTimestamp() &&
             $dateTime->getTimestamp() <= $previousRunDateThreshold->getTimestamp()
         ) {
             return true;
