@@ -6,10 +6,12 @@ namespace Synolia\SyliusSchedulerCommandPlugin\Grid\FieldType;
 
 use Sylius\Component\Grid\Definition\Field;
 use Sylius\Component\Grid\FieldTypes\FieldTypeInterface;
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Twig\Environment;
 
-final class ScheduledCommandStateType implements FieldTypeInterface
+#[AutoconfigureTag('sylius.grid_field', attributes: ['type' => 'scheduled_command_state'])]
+final readonly class ScheduledCommandStateType implements FieldTypeInterface
 {
     public function __construct(private Environment $twig)
     {
@@ -20,12 +22,9 @@ final class ScheduledCommandStateType implements FieldTypeInterface
      */
     public function render(Field $field, $scheduleCommand, array $options): string
     {
-        return $this->twig->render(
-            $options['template'],
-            [
-                'schedulerCommand' => $scheduleCommand,
-            ],
-        );
+        return $this->twig->render($options['template'], [
+            'schedulerCommand' => $scheduleCommand,
+        ]);
     }
 
     /** @inheritdoc */

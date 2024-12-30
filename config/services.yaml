@@ -1,0 +1,13 @@
+parameters:
+    env(SYNOLIA_SCHEDULER_PLUGIN_PING_INTERVAL): 300
+    env(SYNOLIA_SCHEDULER_PLUGIN_KEEP_ALIVE): true
+    env(SYNOLIA_SCHEDULER_PLUGIN_LOGS_DIR): '%kernel.logs_dir%'
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Synolia\SyliusSchedulerCommandPlugin\:
+        resource: '../src/*'
+        exclude: '../src/{Entity,SynoliaSyliusSchedulerCommandPlugin.php}'

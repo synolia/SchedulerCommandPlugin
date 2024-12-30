@@ -5,22 +5,27 @@ declare(strict_types=1);
 namespace Synolia\SyliusSchedulerCommandPlugin\Runner;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Process\Exception\ProcessTimedOutException;
 use Symfony\Component\Process\Process;
 use Synolia\SyliusSchedulerCommandPlugin\Entity\ScheduledCommandInterface;
 use Synolia\SyliusSchedulerCommandPlugin\Repository\ScheduledCommandRepositoryInterface;
 
+#[AutoconfigureTag(attributes: ['name' => 'sylius.grid_field', 'type' => 'scheduled_command_url'])]
 class ScheduleCommandRunner implements ScheduleCommandRunnerInterface
 {
     public function __construct(
-        private ScheduledCommandRepositoryInterface $scheduledCommandRepository,
-        private EntityManagerInterface $entityManager,
-        private KernelInterface $kernel,
-        private string $logsDir,
-        private string $projectDir,
-        private int $pingInterval = 60,
-        private bool $keepConnectionAlive = false,
+        private readonly ScheduledCommandRepositoryInterface $scheduledCommandRepository,
+        private readonly EntityManagerInterface $entityManager,
+        #[Autowire(env: 'string:SYNOLIA_SCHEDULER_PLUGIN_LOGS_DIR')]
+        private readonly string $logsDir,
+        #[Autowire(param: 'kernel.project_dir')]
+        private readonly string $projectDir,
+        #[Autowire(env: 'int:SYNOLIA_SCHEDULER_PLUGIN_PING_INTERVAL')]
+        private readonly int $pingInterval = 60,
+        #[Autowire(env: 'bool:SYNOLIA_SCHEDULER_PLUGIN_KEEP_ALIVE')]
+        private readonly bool $keepConnectionAlive = false,
     ) {
     }
 
@@ -34,7 +39,7 @@ class ScheduleCommandRunner implements ScheduleCommandRunnerInterface
 
         $process = Process::fromShellCommandline(
             $this->getCommandLine($scheduledCommand),
-            $this->kernel->getProjectDir(),
+            $this->projectDir,
         );
 
         $scheduledCommand->setExecutedAt(new \DateTime());

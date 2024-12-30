@@ -9,81 +9,55 @@ use Doctrine\ORM\Mapping as ORM;
 use Synolia\SyliusSchedulerCommandPlugin\Enum\ScheduledCommandStateEnum;
 use Synolia\SyliusSchedulerCommandPlugin\Repository\ScheduledCommandRepository;
 
-/**
- * @ORM\Entity(repositoryClass="Synolia\SyliusSchedulerCommandPlugin\Repository\ScheduledCommandRepository")
- * @ORM\Table("synolia_scheduled_commands")
- */
 #[ORM\Entity(repositoryClass: ScheduledCommandRepository::class)]
 #[ORM\Table(name: 'synolia_scheduled_commands')]
 class ScheduledCommand implements ScheduledCommandInterface
 {
-    /**
-     * @var int|null
-     *
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
+    /** @var int|null */
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: Types::INTEGER)]
     private $id;
 
-    /** @ORM\Column(type="string") */
     #[ORM\Column(type: Types::STRING)]
     private string $name = '';
 
-    /** @ORM\Column(type="string") */
     #[ORM\Column(type: Types::STRING)]
     private string $command = '';
 
-    /** @ORM\Column(type="string", nullable=true) */
     #[ORM\Column(type: Types::STRING, nullable: true)]
     private ?string $arguments = null;
 
-    /** @ORM\Column(name="executed_at", type="datetime", nullable=true) */
     #[ORM\Column(name: 'executed_at', type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTime $executedAt = null;
 
-    /** @ORM\Column(type="integer", nullable=true) */
     #[ORM\Column(type: Types::INTEGER, nullable: true)]
     private ?int $lastReturnCode = null;
 
     /**
      * Log's file name (without path)
-     *
-     * @ORM\Column(type="string", nullable=true)
      */
     #[ORM\Column(type: Types::STRING, nullable: true)]
     private ?string $logFile = null;
 
-    /** @ORM\Column(type="datetime", nullable=true) */
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTime $commandEndTime = null;
 
-    /** @ORM\Column(name="created_at", type="datetime", nullable=false) */
     #[ORM\Column(name: 'created_at', type: Types::DATETIME_MUTABLE, nullable: false)]
     private \DateTime $createdAt;
 
-    /** @ORM\Column(name="state", type="string") */
     #[ORM\Column(name: 'state', type: Types::STRING)]
     private string $state = ScheduledCommandStateEnum::WAITING;
 
-    /** @ORM\Column(type="integer", nullable=true) */
     #[ORM\Column(type: Types::INTEGER, nullable: true)]
     private ?int $timeout = null;
 
-    /** @ORM\Column(type="integer", nullable=true) */
     #[ORM\Column(type: Types::INTEGER, nullable: true)]
     private ?int $idleTimeout = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Synolia\SyliusSchedulerCommandPlugin\Entity\CommandInterface", inversedBy="scheduledCommands")
-     * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
-     */
     #[ORM\ManyToOne(targetEntity: CommandInterface::class, inversedBy: 'scheduledCommands')]
     #[ORM\JoinColumn(name: 'owner_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
-    private ?\Synolia\SyliusSchedulerCommandPlugin\Entity\CommandInterface $owner = null;
+    private ?CommandInterface $owner = null;
 
     public function __construct()
     {

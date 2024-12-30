@@ -6,8 +6,10 @@ namespace Synolia\SyliusSchedulerCommandPlugin\Grid\FieldType;
 
 use Sylius\Component\Grid\Definition\Field;
 use Sylius\Component\Grid\FieldTypes\FieldTypeInterface;
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+#[AutoconfigureTag('sylius.grid_field', attributes: ['type' => 'scheduled_command_execution_time'])]
 class ScheduledCommandExecutionTimeType implements FieldTypeInterface
 {
     private const HOUR_IN_SECONDES = 3600;

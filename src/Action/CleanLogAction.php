@@ -7,12 +7,14 @@ namespace Synolia\SyliusSchedulerCommandPlugin\Action;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Synolia\SyliusSchedulerCommandPlugin\Entity\ScheduledCommand;
 use Synolia\SyliusSchedulerCommandPlugin\Repository\CommandRepository;
 
 final class CleanLogAction extends AbstractController
 {
+    #[Route('/scheduled-commands/{command}/clean-log', name: 'sylius_admin_scheduler_empty_log_file', defaults: ['_sylius' => ['permission' => true]], methods: ['GET'])]
     public function __invoke(
         TranslatorInterface $translator,
         CommandRepository $commandRepository,

@@ -51,9 +51,6 @@ interface CommandInterface extends ResourceInterface
 
     public function setIdleTimeout(?int $timeout): self;
 
-    /**
-     * @return Collection<array-key, \Synolia\SyliusSchedulerCommandPlugin\Entity\ScheduledCommandInterface>|\Synolia\SyliusSchedulerCommandPlugin\Entity\ScheduledCommandInterface[]
-     */
     public function getScheduledCommands(): Collection;
 
     public function addScheduledCommand(ScheduledCommandInterface $scheduledCommand): self;

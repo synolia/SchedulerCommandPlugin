@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Synolia\SyliusSchedulerCommandPlugin\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Process\Process;
+use Symfony\Component\Routing\Attribute\Route;
 use Synolia\SyliusSchedulerCommandPlugin\Entity\CommandInterface;
 use Synolia\SyliusSchedulerCommandPlugin\Entity\ScheduledCommandInterface;
 use Synolia\SyliusSchedulerCommandPlugin\Planner\ScheduledCommandPlannerInterface;
@@ -17,12 +19,14 @@ use Webmozart\Assert\Assert;
 class ScheduledCommandExecuteImmediateController extends AbstractController
 {
     public function __construct(
-        private ScheduledCommandPlannerInterface $scheduledCommandPlanner,
-        private CommandRepositoryInterface $commandRepository,
-        private string $projectDir,
+        private readonly ScheduledCommandPlannerInterface $scheduledCommandPlanner,
+        private readonly CommandRepositoryInterface $commandRepository,
+        #[Autowire(param: 'kernel.project_dir')]
+        private readonly string $projectDir,
     ) {
     }
 
+    #[Route('/scheduled-commands/execute/immediate/{commandId}', name: 'execute_immediate_schedule', defaults: ['_sylius' => ['permission' => true]], methods: ['GET|PUT'])]
     public function executeImmediate(Request $request, string $commandId): Response
     {
         $command = $this->commandRepository->find($commandId);

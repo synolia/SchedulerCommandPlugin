@@ -5,16 +5,20 @@ declare(strict_types=1);
 namespace Synolia\SyliusSchedulerCommandPlugin\Parser;
 
 use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Webmozart\Assert\Assert;
 
 class CommandParser implements CommandParserInterface
 {
     /** @var string[] */
-    private array $excludedNamespaces;
+    private readonly array $excludedNamespaces;
 
-    public function __construct(private KernelInterface $kernel, array $excludedNamespaces = [])
-    {
+    public function __construct(
+        private readonly KernelInterface $kernel,
+        #[Autowire(['_complete'])]
+        array $excludedNamespaces = [],
+    ) {
         Assert::allString($excludedNamespaces);
         $this->excludedNamespaces = $excludedNamespaces;
     }

@@ -6,6 +6,7 @@ namespace Synolia\SyliusSchedulerCommandPlugin\Command;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -15,6 +16,7 @@ use Synolia\SyliusSchedulerCommandPlugin\Entity\ScheduledCommandInterface;
 use Synolia\SyliusSchedulerCommandPlugin\Enum\ScheduledCommandStateEnum;
 use Synolia\SyliusSchedulerCommandPlugin\Repository\ScheduledCommandRepositoryInterface;
 
+#[AsCommand(name: 'synolia:scheduler:purge-history', description: 'Purge scheduled command history greater than {X} days old.')]
 class PurgeScheduledCommandCommand extends Command
 {
     private const DEFAULT_PURGE_PERIODE_IN_DAYS = 3;
@@ -23,14 +25,12 @@ class PurgeScheduledCommandCommand extends Command
 
     private const DEFAULT_BATCH = 100;
 
-    protected static $defaultName = 'synolia:scheduler:purge-history';
-
     private SymfonyStyle $io;
 
     public function __construct(
-        private EntityManagerInterface $entityManager,
-        private ScheduledCommandRepositoryInterface $scheduledCommandRepository,
-        private LoggerInterface $logger,
+        private readonly EntityManagerInterface $entityManager,
+        private readonly ScheduledCommandRepositoryInterface $scheduledCommandRepository,
+        private readonly LoggerInterface $logger,
         ?string $name = null,
     ) {
         parent::__construct($name);
@@ -39,7 +39,6 @@ class PurgeScheduledCommandCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setDescription('Purge scheduled command history greater than {X} days old.')
             ->addOption('all', 'p', InputOption::VALUE_NONE, 'Remove all schedules with specified state (default is finished).')
             ->addOption('days', 'd', InputOption::VALUE_OPTIONAL, '{X} days old', self::DEFAULT_PURGE_PERIODE_IN_DAYS)
             ->addOption('state', 's', InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, 'State of scheduled history to be cleaned', [self::DEFAULT_STATE])
@@ -47,7 +46,7 @@ class PurgeScheduledCommandCommand extends Command
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->io = new SymfonyStyle($input, $output);
 

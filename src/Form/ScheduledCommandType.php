@@ -15,7 +15,7 @@ use Synolia\SyliusSchedulerCommandPlugin\Entity\ScheduledCommandInterface;
 final class ScheduledCommandType extends AbstractType
 {
     /**
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @inheritdoc
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {

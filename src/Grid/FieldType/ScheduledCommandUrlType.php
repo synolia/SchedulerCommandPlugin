@@ -6,15 +6,19 @@ namespace Synolia\SyliusSchedulerCommandPlugin\Grid\FieldType;
 
 use Sylius\Component\Grid\Definition\Field;
 use Sylius\Component\Grid\FieldTypes\FieldTypeInterface;
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Environment;
 
-final class ScheduledCommandUrlType implements FieldTypeInterface
+#[AutoconfigureTag('sylius.grid_field', attributes: ['type' => 'scheduled_command_url'])]
+final readonly class ScheduledCommandUrlType implements FieldTypeInterface
 {
     public function __construct(
         private UrlGeneratorInterface $urlGenerator,
         private Environment $twig,
+        #[Autowire(env: 'string:SYNOLIA_SCHEDULER_PLUGIN_LOGS_DIR')]
         private string $logsDir,
     ) {
     }

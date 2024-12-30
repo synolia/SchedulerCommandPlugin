@@ -15,10 +15,10 @@ use Synolia\SyliusSchedulerCommandPlugin\Repository\ScheduledCommandRepository;
 class ScheduledCommandPlanner implements ScheduledCommandPlannerInterface
 {
     public function __construct(
-        private FactoryInterface $scheduledCommandFactory,
-        private EntityManagerInterface $entityManager,
-        private ScheduledCommandRepository $scheduledCommandRepository,
-        private LoggerInterface $logger,
+        private readonly FactoryInterface $scheduledCommandFactory,
+        private readonly EntityManagerInterface $entityManager,
+        private readonly ScheduledCommandRepository $scheduledCommandRepository,
+        private readonly LoggerInterface $logger,
     ) {
     }
 
