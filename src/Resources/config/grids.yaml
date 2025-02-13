@@ -91,7 +91,7 @@ sylius_grid:
                         template: '@SynoliaSyliusSchedulerCommandPlugin/Grid/Column/scheduled_command_state.html.twig'
                 executedAt:
                     type: scheduled_command_executed_at
-                    sortable: ~
+                    sortable: createdAt
                     label: synolia.ui.scheduled_command.last_execution
                     options:
                         date_format: !php/const \IntlDateFormatter::SHORT
